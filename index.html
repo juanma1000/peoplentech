@@ -4,34 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Harnesses y SDD</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <style>
   :root {
-    --bg: #0f1220;
-    --bg2: #171b30;
-    --fg: #eef0f8;
-    --muted: #9aa3c7;
-    --accent: #7c9cff;
-    --accent2: #5eead4;
-    --warn: #fbbf24;
-    --card: #1e2340;
-    --border: #2b3159;
+    --bg: #f5f5f5; --bg2: #ffffff; --fg: #3d3d3d; --muted: #707070;
+    --accent: #ff812d; --accent2: #d9600f; --warn: #ff812d; --card: #ffffff; --border: #e4e6eb;
+    --logo-bg: transparent;
   }
-  @media (prefers-color-scheme: light) {
+  @media (prefers-color-scheme: dark) {
     :root[data-theme="auto"] {
-      --bg: #f6f7fb; --bg2: #ffffff; --fg: #141830; --muted: #5a6285;
-      --accent: #3b5bdb; --accent2: #0f9d8a; --warn: #b7791f; --card: #ffffff; --border: #d9dcec;
+      --bg: #181a1b; --bg2: #252829; --fg: #f5f5f5; --muted: #a1a1a1;
+      --accent: #ff812d; --accent2: #ffa561; --warn: #ff812d; --card: #252829; --border: #3f3f3f;
+      --logo-bg: #fff;
     }
   }
-  :root[data-theme="light"] {
-    --bg: #f6f7fb; --bg2: #ffffff; --fg: #141830; --muted: #5a6285;
-    --accent: #3b5bdb; --accent2: #0f9d8a; --warn: #b7791f; --card: #ffffff; --border: #d9dcec;
+  :root[data-theme="dark"] {
+    --bg: #181a1b; --bg2: #252829; --fg: #f5f5f5; --muted: #a1a1a1;
+    --accent: #ff812d; --accent2: #ffa561; --warn: #ff812d; --card: #252829; --border: #3f3f3f;
+    --logo-bg: #fff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; }
   body {
-    background: radial-gradient(1200px 700px at 80% -10%, var(--bg2), var(--bg));
+    background: var(--bg);
     color: var(--fg);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: "Helvetica Neue LT Std", "Helvetica Neue", Helvetica, "Open Sans", Arial, sans-serif;
   }
   .deck { height: 100%; position: relative; }
   .slide {
@@ -58,19 +55,19 @@
   ul ul { font-size: .85em; color: var(--muted); margin-top: 1vh; }
   .grid { display: grid; gap: 1.6vw; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
   .card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     padding: 1.6vh 1.4vw; font-size: clamp(.95rem, 1.5vw, 1.2rem);
   }
   .card b { display: block; color: var(--accent); margin-bottom: .5vh; font-size: 1.05em; }
   .card small { color: var(--muted); }
   .quote {
     border-left: 4px solid var(--warn); padding: 1.4vh 1.6vw; font-size: clamp(1.1rem, 2.2vw, 1.8rem);
-    background: var(--card); border-radius: 0 14px 14px 0;
+    background: var(--card); border-radius: 0 16px 16px 0;
   }
   /* flow */
   .flow { display: flex; flex-wrap: wrap; gap: 1vw; align-items: stretch; }
   .step {
-    flex: 1 1 140px; background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    flex: 1 1 140px; background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     padding: 1.6vh 1vw; text-align: center; cursor: pointer; position: relative;
     transition: transform .2s, border-color .2s, background .2s;
     font-size: clamp(.95rem, 1.6vw, 1.25rem);
@@ -78,6 +75,53 @@
   .step:hover { transform: translateY(-4px); border-color: var(--accent); }
   .step.on { border-color: var(--accent2); background: color-mix(in srgb, var(--accent2) 14%, var(--card)); }
   .step small { display: block; color: var(--muted); margin-top: .6vh; font-size: .75em; }
+  .phases { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6vw; }
+  .phase { border: 2px solid var(--border); border-radius: 20px; padding: 1.2vh 1vw 1.6vh; display: grid; gap: 1.2vh; align-content: start; }
+  .phase:first-child { border-color: var(--accent2); }
+  .phase:last-child { border-color: var(--accent); }
+  .phase-h { font-weight: 700; font-size: clamp(1.05rem, 1.9vw, 1.5rem); }
+  .phase-h small { display: block; font-weight: 400; color: var(--muted); font-size: .6em; }
+  .step .ico { display: block; font-size: 1.8em; margin-bottom: .4vh; }
+  .ico-svg { color: var(--accent); vertical-align: -.15em; margin-right: .3em; }
+  .step .ico .ico-svg, .prd-sec .ico-svg, .phase-h .ico-svg { margin-right: 0; }
+  .phase-h .ico-svg { margin-right: .3em; }
+  .viz .ico-svg { margin-right: .35em; width: 1.1em; height: 1.1em; }
+  .viz .chip.agent .ico-svg, .phase-badge .ico-svg { color: #fff; }
+  .viz { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1vw; color: var(--fg); }
+  .viz .chip { background: var(--bg); border: 1px solid var(--border); border-radius: 99px; padding: .5em 1em; }
+  .viz .chip.agent { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+  .viz .arrow { color: var(--accent); font-size: 1.4em; }
+  @media (max-width: 900px) { .phases { grid-template-columns: 1fr; } }
+  .prd { display: flex; align-items: center; gap: 1.4vw; flex-wrap: wrap; }
+  .prd .chip { background: var(--card); border: 1px solid var(--border); border-radius: 99px; padding: .5em 1em; margin: .6vh 0; font-size: clamp(.9rem, 1.4vw, 1.1rem); white-space: nowrap; }
+  .prd .arrow { color: var(--accent); font-size: 2em; }
+  .prd-doc { flex: 1 1 320px; background: var(--card); border: 1px solid var(--border); border-top: 6px solid var(--accent); border-radius: 12px; padding: 1.4vh 1.4vw; display: grid; gap: .8vh; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+  .prd-title { font-weight: 700; font-size: clamp(1rem, 1.6vw, 1.3rem); border-bottom: 1px dashed var(--border); padding-bottom: .8vh; }
+  .prd-sec { display: grid; grid-template-columns: 1.6em auto 1fr; gap: .5em; align-items: baseline; font-size: clamp(.9rem, 1.4vw, 1.1rem); }
+  .prd-sec b { color: var(--accent2); }
+  .prd-sec small { color: var(--muted); }
+  .split { display: flex; margin-top: 1vh; border-radius: 99px; overflow: hidden; border: 1px solid var(--border); font-size: clamp(.95rem, 1.6vw, 1.3rem); }
+  .seg { width: 0; flex: none; padding: 1.2vh 1.2vw; background: var(--accent); color: #fff; white-space: nowrap; overflow: hidden; transition: width 1s ease .2s; }
+  .seg.impl { background: var(--card); color: var(--fg); }
+  .seg b { margin-left: .5em; }
+  .slide.active .seg { width: var(--w); }
+  .std { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .card ul { font-size: .95em; gap: .5vh; margin-top: .8vh; }
+  .card ul li { padding-left: 1.1em; }
+  .ask { font-size: clamp(2.4rem, 6vw, 5rem); font-weight: 700; color: var(--accent); text-align: center; line-height: 1; }
+  .evo { display: grid; grid-template-columns: 1fr 3fr; gap: 1.6vw; align-items: end; }
+  .evo-step { background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 1.6vh 1.4vw; }
+  .evo-step.e1 { margin-top: 8vh; }
+  .evo-step.e2 { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
+  .evo-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4vw; margin-top: 1vh; font-size: clamp(.9rem, 1.4vw, 1.15rem); }
+  .evo-cols b { color: var(--accent2); display: block; }
+  .evo-cols ul { font-size: 1em; margin-top: .6vh; gap: .6vh; }
+  .evo-h { font-weight: 700; font-size: clamp(1.1rem, 2vw, 1.6rem); }
+  .evo-h small { display: block; font-weight: 400; color: var(--muted); font-size: .6em; }
+  .evo-step ul { font-size: clamp(.95rem, 1.5vw, 1.2rem); margin-top: 1vh; }
+  .evo-step ul ul { font-size: .85em; gap: .4vh; }
+  @media (max-width: 900px) { .evo, .evo-cols { grid-template-columns: 1fr; } .evo-step.e1 { margin-top: 0; } }
+  .base-bar { background: var(--accent); color: #fff; border-radius: 16px; padding: 1.4vh 1.4vw; text-align: center; font-size: clamp(.95rem, 1.6vw, 1.3rem); }
   .detail {
     min-height: 7vh; padding: 1.4vh 1.6vw; border-radius: 12px; background: var(--card);
     border: 1px dashed var(--border); font-size: clamp(1rem, 1.7vw, 1.3rem); color: var(--muted);
@@ -87,10 +131,11 @@
   .reveal.shown { opacity: 1; transform: none; }
   /* bar chart */
   .bars { display: grid; gap: 1.4vh; font-size: clamp(1rem, 1.7vw, 1.3rem); }
-  .bar { display: grid; grid-template-columns: 9ch 1fr; gap: 1vw; align-items: center; }
+  .bar { display: grid; grid-template-columns: 13ch 1fr 6ch; gap: 1vw; align-items: center; }
   .bar div.track { background: var(--card); border: 1px solid var(--border); border-radius: 99px; height: 2.6vh; overflow: hidden; }
   .bar div.fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s ease .2s; }
   .slide.active .fill { width: var(--w); }
+  .bar .val { font-weight: 700; color: var(--accent); text-align: right; white-space: nowrap; }
   code, pre {
     font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     background: var(--card); border: 1px solid var(--border); border-radius: 10px;
@@ -104,15 +149,16 @@
     position: fixed; bottom: 0; left: 0; right: 0; padding: 1.4vh 2vw;
     display: flex; justify-content: space-between; align-items: center; gap: 1rem;
     color: var(--muted); font-size: .85rem; z-index: 10;
-    background: linear-gradient(transparent, var(--bg));
+    background: linear-gradient(transparent, var(--bg) 60%); padding-bottom: calc(1.4vh + 6px);
   }
   .hud button {
     background: var(--card); color: var(--fg); border: 1px solid var(--border);
-    border-radius: 8px; padding: .4em .8em; cursor: pointer; font: inherit;
+    border-radius: 99px; padding: .4em .8em; cursor: pointer; font: inherit;
   }
   .hud button:hover { border-color: var(--accent); }
+  .hud #tbtn { background: var(--accent); border-color: var(--accent); color: #fff; }
   .hud .grp { display: flex; gap: .5rem; align-items: center; }
-  #timer.over { color: #f87171; font-weight: 700; }
+  #timer.over { color: #d92d20; font-weight: 700; }
   .overview {
     position: fixed; inset: 0; background: color-mix(in srgb, var(--bg) 94%, transparent); z-index: 20;
     display: none; padding: 6vh 6vw; overflow: auto;
@@ -123,11 +169,77 @@
   .overview .card:hover { border-color: var(--accent); }
   .overview .card.cur { border-color: var(--accent2); }
   .title-slide { align-items: flex-start; }
+  .pats { grid-template-columns: repeat(3, 1fr); }
+  .pat { position: relative; display: grid; grid-template-columns: auto 1fr; column-gap: 1.2vw; align-items: center; font-size: clamp(.9rem, 1.3vw, 1.1rem); }
+  .pat-ico { grid-row: 1 / 4; width: 3.6em; height: auto; color: var(--accent); }
+  .pat small { display: block; }
+  .pat b { margin-bottom: .2vh; }
+  .card-demo { position: relative; border: 2px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+  .pat-hl { border: 2px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+  .pat-badge { position: absolute; top: -.8em; right: 1em; background: var(--accent); color: #fff; border-radius: 99px; padding: .15em .7em; font-size: .7em; font-weight: 700; }
+  @media (max-width: 900px) { .pats { grid-template-columns: repeat(2, 1fr); } }
+  .pipe { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; gap: 1vw; }
+  .pipe .arrow { align-self: center; color: var(--accent); font-size: 2.2em; }
+  .pipe-step { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2vh 1.4vw; display: grid; gap: 1.2vh; align-content: start; font-size: clamp(.95rem, 1.5vw, 1.2rem); }
+  .pipe-n { width: 2em; height: 2em; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; }
+  .pipe-cmd { background: none; border: none; padding: 0; color: var(--accent2); font-weight: 700; font-size: 1.05em; word-break: break-all; }
+  .pipe-step p { color: var(--fg); font-size: 1.05em; }
+  .io { display: flex; align-items: baseline; gap: .6em; padding-top: 1vh; border-top: 1px dashed var(--border); color: var(--muted); }
+  .io span { font-size: .7em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--accent2); min-width: 3.6em; }
+  @media (max-width: 900px) { .pipe { grid-template-columns: 1fr; } .pipe .arrow { transform: rotate(90deg); justify-self: center; } }
+  .callout { display: flex; align-items: center; gap: .6em; background: var(--accent); color: #fff; border-radius: 16px; padding: 1.6vh 1.6vw; font-size: clamp(1.2rem, 2.4vw, 2rem); font-weight: 600; line-height: 1.25; }
+  .callout .ico-svg { color: #fff; width: 1.6em; height: 1.6em; flex: none; margin-right: 0; }
+  .callout b { font-weight: 800; text-decoration: underline; text-decoration-thickness: .08em; text-underline-offset: .15em; }
+  .pipe4 { grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; }
+  .pipe4 .pipe-step small { color: var(--muted); font-size: .85em; }
+  .pipe-impl { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+  @media (max-width: 900px) { .pipe4 { grid-template-columns: 1fr; } }
+  .pipe-code { background: #000; color: var(--accent); border: none; border-radius: 8px; padding: .2em .6em; font-size: .9em; }
+  /* demo en vivo */
+  body { transition: background .3s ease, color .3s ease; }
+  body.demo {
+    --bg: #101213; --bg2: #181a1b; --fg: #f5f5f5; --muted: #a1a1a1;
+    --card: #1d2021; --border: #3f3f3f; --accent2: #ffa561; --logo-bg: #fff;
+  }
+  .demo-banner {
+    display: inline-flex; align-items: center; gap: .5em; align-self: flex-start;
+    background: var(--accent); color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
+    font-size: clamp(2rem, 5.5vw, 4.5rem); line-height: 1; padding: .3em .6em; border-radius: 16px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  .demo-banner .ico-svg { color: #fff; margin-right: 0; width: 1em; height: 1em; }
+  .demo-slide h2 { font-size: clamp(1.4rem, 3vw, 2.4rem); color: var(--muted); font-weight: 600; }
+  .demo-slide h2 em { color: var(--fg); }
+  .term-hint {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: var(--accent);
+    font-size: clamp(1.4rem, 3vw, 2.4rem); background: #000; border: 1px solid var(--border);
+    border-radius: 10px; padding: .5em .9em; align-self: flex-start;
+  }
+  .cursor { animation: blink 1s steps(2, start) infinite; }
+  @keyframes blink { to { visibility: hidden; } }
+  .phase-badge {
+    position: fixed; top: 2.4vh; left: 3vw; z-index: 9; display: none;
+    border-radius: 99px; padding: .45em 1em; font-weight: 700; color: #fff;
+    font-size: clamp(.8rem, 1.2vw, 1rem);
+  }
+  .phase-badge.discovery { display: block; background: var(--accent2); }
+  .phase-badge.delivery { display: block; background: var(--accent); }
+  body.demo .phase-badge.discovery { background: #d9600f; }
+  .brand {
+    position: fixed; top: 2.4vh; right: 3vw; z-index: 9; display: flex; align-items: center;
+    background: var(--logo-bg); border-radius: 12px; padding: .4rem .7rem;
+  }
+  .brand img { height: clamp(28px, 4.6vh, 44px); width: auto; display: block; }
+  body::after {
+    content: ""; position: fixed; left: 0; right: 0; bottom: 0; height: 6px; background: var(--accent); z-index: 11;
+  }
   @media (max-width: 640px) { .slide { padding: 5vh 6vw 12vh; } }
 </style>
 </head>
 <body>
 <div class="progress" id="progress"></div>
+<div class="phase-badge" id="phaseBadge"></div>
+<a class="brand" href="https://www.celsia.com/es/" target="_blank" rel="noopener"><img src="assets/celsia-logo.svg" alt="Celsia"></a>
 
 <main class="deck" id="deck">
 
@@ -140,167 +252,376 @@
   </section>
 
   <!-- 2 agenda -->
-  <section class="slide" data-title="Agenda" data-min="3">
+  <section class="slide" data-title="Agenda" data-min="0">
     <div class="tag">Agenda</div>
     <h2>Lo que vamos a ver</h2>
     <div class="bars">
-      <div class="bar"><span>Intro</span><div class="track"><div class="fill" style="--w:10%"></div></div></div>
-      <div class="bar"><span>Discovery</span><div class="track"><div class="fill" style="--w:20%"></div></div></div>
-      <div class="bar"><span>Arquitectura</span><div class="track"><div class="fill" style="--w:20%"></div></div></div>
-      <div class="bar"><span>SDD</span><div class="track"><div class="fill" style="--w:27%"></div></div></div>
-      <div class="bar"><span>AGENTS.md</span><div class="track"><div class="fill" style="--w:10%"></div></div></div>
-      <div class="bar"><span>Cierre</span><div class="track"><div class="fill" style="--w:13%"></div></div></div>
+      <div class="bar"><span>Intro</span><div class="track"><div class="fill" style="--w:10%"></div></div><span class="val">3 min</span></div>
+      <div class="bar"><span>Discovery</span><div class="track"><div class="fill" style="--w:13%"></div></div><span class="val">4 min</span></div>
+      <div class="bar"><span>Arquitectura</span><div class="track"><div class="fill" style="--w:13%"></div></div><span class="val">4 min</span></div>
+      <div class="bar"><span>Historias</span><div class="track"><div class="fill" style="--w:17%"></div></div><span class="val">5 min</span></div>
+      <div class="bar"><span>SDD</span><div class="track"><div class="fill" style="--w:30%"></div></div><span class="val">9 min</span></div>
+      <div class="bar"><span>Seguimiento</span><div class="track"><div class="fill" style="--w:7%"></div></div><span class="val">2 min</span></div>
+      <div class="bar"><span>Cierre</span><div class="track"><div class="fill" style="--w:10%"></div></div><span class="val">3 min</span></div>
     </div>
     <p class="lead">Barras proporcionales al tiempo de cada bloque.</p>
   </section>
 
   <!-- 3 harness -->
-  <section class="slide" data-title="¿Qué es un harness?" data-min="4">
+  <section class="slide" data-title="¿Qué es un harness?" data-min="1">
     <div class="tag">1 · Introducción</div>
     <h2>Agente + <em>harness</em></h2>
-    <ul>
-      <li class="reveal">El modelo es el motor; el <b>harness</b> es todo lo que lo rodea</li>
-      <li class="reveal">Instrucciones, herramientas, permisos, memoria, verificaciones</li>
-      <li class="reveal">Guía y <b>controla</b> el trabajo del agente</li>
-      <li class="reveal">Cada agente tiene su rol</li>
-    </ul>
-    <p class="lead">Pulsa ↓ o espacio para revelar cada punto.</p>
+    <p class="lead">El modelo es el motor; el <b>harness</b> es todo lo que lo rodea, lo guía y lo <b>controla</b>.</p>
+    <div class="grid">
+      <div class="card"><b>Skills</b>Capacidades empaquetadas que el agente carga solo cuando la tarea las necesita</div>
+      <div class="card"><b>Reglas</b>Normas y convenciones del proyecto que el agente debe respetar siempre</div>
+      <div class="card"><b>Memoria</b>Contexto persistente: decisiones y hallazgos que sobreviven entre sesiones</div>
+      <div class="card"><b>Verificaciones</b>Tests, lint y revisión que validan el resultado antes de entregar</div>
+      <div class="card"><b>Permisos</b>Qué herramientas y comandos puede ejecutar el agente, y cuáles piden aprobación</div>
+      <div class="card"><b>Subagentes</b>Agentes especializados con rol y contexto propio, delegados por el principal</div>
+    </div>
   </section>
 
   <!-- 4 ciclo interactivo -->
-  <section class="slide" data-title="Ciclo de vida" data-min="6">
+  <section class="slide" data-title="Ciclo de vida" data-min="2">
     <div class="tag">1 · Introducción</div>
     <h2>Ciclo: <em>Discovery → Delivery</em></h2>
-    <div class="flow" id="flow">
-      <div class="step" data-d="Agente investigador: benchmarking en la web. Salida: PRD con objetivo y primeras HU.">Discovery<small>Benchmark · PRD</small></div>
-      <div class="step" data-d="Agente arquitecto: patrón, ADR y diagramas. El código de la IA sale tan bien como la arquitectura que le des.">Arquitectura<small>Patrón · ADR</small></div>
-      <div class="step" data-d="Specify → Plan → Tasks. Las specs son archivos versionados que reducen alucinaciones.">Specs<small>SDD</small></div>
-      <div class="step" data-d="Agente implementador trabaja tarea a tarea contra la spec, dentro de los límites de AGENTS.md.">Implementación<small>Tasks → código</small></div>
-      <div class="step" data-d="Pruebas derivadas de criterios de aceptación, revisión y CI: el harness verifica antes de entregar.">Delivery<small>Tests · CI · Review</small></div>
+    <div class="phases" id="flow">
+      <div class="phase">
+        <div class="phase-h"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> Discovery <small>Qué construir</small></div>
+        <div class="flow">
+          <div class="step" data-in="💡 Idea de producto" data-agent="🧑‍💼 Subagente Product Manager" data-out="📄 PRD (objetivo y alcance)"><span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>Discovery<small>Benchmark · PRD</small></div>
+          <div class="step" data-in="📄 PRD" data-agent="🗺️ Subagente Software Architect" data-out="🧩 Patrón · ADR · diagramas"><span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="2" width="7" height="5" rx="1"/><rect x="2" y="17" width="7" height="5" rx="1"/><rect x="15" y="17" width="7" height="5" rx="1"/><path d="M12 7v5M5.5 17v-5h13v5"/></svg></span>Arquitectura<small>Patrón · ADR</small></div>
+          <div class="step" data-in="📄 PRD + 🧩 ADR" data-agent="🧑‍💼 Subagente Product Manager" data-out="📝 Historias de usuario (HU)"><span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg></span>HU<small>Historias de usuario</small></div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-h"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="m12 15-3-3a22 22 0 0 1 2-4 12 12 0 0 1 11-6c0 3-1 8-6 11a22 22 0 0 1-4 2z"/><path d="M9 12H4s.5-3 2-4c1.5-1 5 0 5 0"/><path d="M12 15v5s3-.5 4-2c1-1.5 0-5 0-5"/></svg> Delivery <small>Cómo construirlo y entregarlo</small></div>
+        <div class="flow">
+          <div class="step" data-in="📝 HU + 🧩 ADR" data-agent="📋 Flujo SDD: Specify → Plan → Tasks" data-out="📑 spec.md · plan · tasks"><span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg></span>Specs<small>SDD</small></div>
+          <div class="step" data-in="📑 Tasks + 📏 Estándares" data-agent="💻 Subagentes Backend Expert · Frontend Expert · QA Expert" data-out="⚙️ Código tarea a tarea"><span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span>Implementación<small>Tasks → código</small></div>
+          <div class="step" data-in="⚙️ Código + ✅ criterios" data-agent="🧪 Tests · CI · Review" data-out="📦 Entrega verificada"><span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>Entrega<small>Tests · CI · Review</small></div>
+        </div>
+      </div>
     </div>
-    <div class="detail" id="flowDetail">Haz clic en una etapa para ver qué agente trabaja y qué entrega.</div>
+    <div class="detail" id="flowDetail">Haz clic en una etapa para ver qué entra, quién trabaja y qué sale.</div>
   </section>
 
   <!-- 5 discovery -->
-  <section class="slide" data-title="Benchmarking" data-min="9">
+  <section class="slide" data-title="Benchmarking" data-phase="discovery" data-min="3">
     <div class="tag">2 · Discovery</div>
-    <h2>Benchmarking con <em>Perplexity</em></h2>
-    <p class="lead">Un agente busca en la web aplicaciones similares y extrae:</p>
+    <h2>Benchmarking con <em>IA de investigación</em></h2>
+    <div class="viz" style="justify-content:flex-start"><span class="chip agent">Perplexity</span><span class="chip">NotebookLM</span><span class="chip">u otras herramientas</span></div>
+    <p class="lead">El agente busca en la web aplicaciones similares y extrae:</p>
     <div class="grid">
       <div class="card"><b>Objetivo</b>Para qué existen las aplicaciones similares</div>
       <div class="card"><b>Valor añadido</b>Ventajas competitivas</div>
       <div class="card"><b>Funciones</b>Capacidades principales</div>
     </div>
+    <div class="viz" style="justify-content:flex-start"><span class="chip">🔎 Investigación</span><span class="arrow">→</span><span class="chip agent">📄 Documento de benchmark</span><span class="arrow">→</span><span class="chip">insumo del PRD</span></div>
   </section>
 
   <!-- 6 PRD -->
-  <section class="slide" data-title="PRD" data-min="12">
+  <section class="slide" data-title="PRD" data-phase="discovery" data-min="5">
     <div class="tag">2 · Discovery</div>
     <h2>Generación del <em>PRD</em></h2>
-    <div class="grid">
-      <div class="card"><b>Objetivo</b>Qué problema resuelve y para quién</div>
-      <div class="card"><b>Primeras HU</b>Historias de usuario listas para especificar</div>
+    <p class="lead"><b>PRD</b> = <i>Product Requirements Document</i>: el documento que define <b>qué</b> se construye y <b>por qué</b>, antes de decidir el cómo.</p>
+    <div class="prd">
+      <div class="prd-in">
+        <div class="chip">📄 Documento de benchmark</div>
+        <div class="chip">💡 Idea de producto</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="prd-doc">
+        <div class="prd-title">📄 PRD.md</div>
+        <div class="prd-sec"><span>🎯</span><b>Objetivo</b><small>qué problema resuelve y para quién</small></div>
+        <div class="prd-sec"><span>👥</span><b>Usuarios</b><small>quién lo usa</small></div>
+        <div class="prd-sec"><span>🧭</span><b>Alcance</b><small>qué entra y qué no</small></div>
+        <div class="prd-sec"><span>⭐</span><b>Funciones clave</b><small>capacidades principales</small></div>
+        <div class="prd-sec"><span>📏</span><b>Criterios de éxito</b><small>cómo sabemos que funcionó</small></div>
+      </div>
     </div>
-    <p class="lead">El benchmark alimenta el PRD; las HU alimentan las specs.</p>
+  </section>
+
+  <!-- 6b demo PRD -->
+  <section class="slide title-slide demo-slide" data-title="Demo: PRD con una skill" data-phase="discovery" data-min="6">
+    <div class="demo-banner">⌨️ Demo en vivo</div>
+    <h2>Generemos un <em>PRD</em> con una skill</h2>
+    <div class="flow demo">
+      <div class="step"><span class="ico">⌨️</span>Invocar skill<small>/draft-prd</small></div>
+      <div class="step"><span class="ico">💬</span>Responder preguntas<small>idea, usuarios, alcance</small></div>
+      <div class="step"><span class="ico">📄</span>PRD generado<small>docs/PRD.md</small></div>
+    </div>
+    <p class="term-hint">&gt; Cambia a la terminal<span class="cursor">_</span></p>
   </section>
 
   <!-- 7 arquitectura -->
-  <section class="slide" data-title="Patrones de arquitectura" data-min="15">
+  <section class="slide" data-title="Patrones de arquitectura" data-phase="discovery" data-min="7">
     <div class="tag">3 · Arquitectura</div>
     <h2>Patrones de arquitectura</h2>
-    <p class="lead">Haz clic en un patrón.</p>
-    <div class="flow" id="patterns">
-      <div class="step" data-d="Presentación, negocio, datos. Simple y conocida; riesgo: acoplamiento entre capas.">Capas</div>
-      <div class="step" data-d="Núcleo mínimo + plugins. Ideal para productos extensibles.">Microkernel</div>
-      <div class="step" data-d="Servicios independientes desplegables. Escala por equipo; costo operativo alto.">Microservicios</div>
-      <div class="step" data-d="Dominio en el centro, puertos y adaptadores. Muy buen contexto para agentes: límites claros.">Hexagonal</div>
-      <div class="step" data-d="Dependencias apuntan hacia el dominio. Casos de uso explícitos.">Limpia</div>
-      <div class="step" data-d="Componentes que se comunican por eventos. Desacople temporal; trazabilidad más difícil.">Eventos</div>
+    <div class="grid pats">
+      <div class="card pat"><svg class="pat-ico" viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="36" height="7" rx="1.5"/><rect x="6" y="12.5" width="36" height="7" rx="1.5"/><rect x="6" y="22" width="36" height="7" rx="1.5"/></svg><b>Capas</b>Presentación, negocio y datos.<small>Simple y conocida · riesgo: acoplamiento entre capas</small></div>
+      <div class="card pat"><svg class="pat-ico" viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="19" y="10" width="10" height="12" rx="1.5"/><rect x="3" y="3" width="9" height="7" rx="1.5"/><rect x="36" y="3" width="9" height="7" rx="1.5"/><rect x="3" y="22" width="9" height="7" rx="1.5"/><rect x="36" y="22" width="9" height="7" rx="1.5"/><path d="M12 8l7 5M36 8l-7 5M12 24l7-5M36 24l-7-5"/></svg><b>Microkernel</b>Núcleo mínimo más plugins.<small>Ideal para productos extensibles</small></div>
+      <div class="card pat"><svg class="pat-ico" viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="11" height="9" rx="1.5"/><rect x="18.5" y="4" width="11" height="9" rx="1.5"/><rect x="34" y="4" width="11" height="9" rx="1.5"/><rect x="10" y="19" width="11" height="9" rx="1.5"/><rect x="27" y="19" width="11" height="9" rx="1.5"/><path d="M8 13l7 6M24 13v6M40 13l-7 6"/></svg><b>Microservicios</b>Servicios independientes y desplegables.<small>Escala por equipo · costo operativo alto</small></div>
+      <div class="card pat pat-hl"><svg class="pat-ico" viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 2l11 6.3v12.4L24 27 13 20.7V8.3z"/><circle cx="24" cy="14.5" r="3"/><path d="M13 14.5H4M35 14.5h9M24 27v4"/><circle cx="4" cy="14.5" r="1.5"/><circle cx="44" cy="14.5" r="1.5"/></svg><b>Hexagonal</b>Dominio al centro, con puertos y adaptadores.<small>Límites claros: buen contexto para agentes</small><span class="pat-badge">La que usa /draft-architecture</span></div>
+      <div class="card pat"><svg class="pat-ico" viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="16" r="14"/><circle cx="24" cy="16" r="9"/><circle cx="24" cy="16" r="4"/></svg><b>Limpia</b>Las dependencias apuntan hacia el dominio.<small>Casos de uso explícitos</small></div>
+      <div class="card pat"><svg class="pat-ico" viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16h40"/><circle cx="10" cy="6" r="3"/><circle cx="24" cy="6" r="3"/><circle cx="38" cy="26" r="3"/><circle cx="10" cy="26" r="3"/><path d="M10 9v7M24 9v7M38 23v-7M10 23v-7"/></svg><b>Eventos</b>Componentes que se comunican por eventos.<small>Desacople · trazabilidad más difícil</small></div>
     </div>
-    <div class="detail" id="patDetail">Selecciona un patrón.</div>
+    <div class="viz" style="justify-content:flex-start">
+      <span class="chip">🧩 Patrón elegido + 📄 PRD</span><span class="arrow">→</span>
+      <span class="chip agent">⌨️ /draft-architecture</span><span class="arrow">→</span>
+      <span class="chip agent">🗺️ Subagente Software Architect</span><span class="arrow">→</span>
+      <span class="chip">📄 architecture.md</span>
+    </div>
   </section>
 
-  <!-- 8 ADR + diagramas -->
-  <section class="slide" data-title="ADR y diagramas" data-min="18">
-    <div class="tag">3 · Arquitectura</div>
-    <h2>ADR y diagramas</h2>
-    <div class="grid">
-      <div class="card"><b>ADR</b>Registro de cada decisión: contexto, decisión, consecuencias. Memoria para humanos y agentes.</div>
-      <div class="card"><b>Diagramas</b>Visión compartida del sistema; el agente los lee para no inventar estructura.</div>
+  <!-- 8b demo arquitectura -->
+  <section class="slide title-slide demo-slide" data-title="Demo: arquitectura con una skill" data-phase="discovery" data-min="9">
+    <div class="demo-banner">⌨️ Demo en vivo</div>
+    <h2>Generemos la <em>arquitectura</em> con una skill</h2>
+    <div class="flow demo">
+      <div class="step"><span class="ico">⌨️</span>Invocar skill<small>/draft-architecture</small></div>
+      <div class="step"><span class="ico">🗺️</span>Subagente Software Architect<small>lee el PRD y diseña</small></div>
+      <div class="step"><span class="ico">📄</span>Documento generado<small>docs/architecture/architecture.md</small></div>
     </div>
+    <p class="lead">Además del documento, deja diagramas (sistema, datos, secuencia) y decisiones (ADR): el agente los lee para no inventar estructura.</p>
     <div class="quote">Cuanto mejor sea tu arquitectura, mejor será el código que la IA genera para ti.</div>
+    <p class="term-hint">&gt; Cambia a la terminal<span class="cursor">_</span></p>
+  </section>
+
+  <!-- 10b skills de HU -->
+  <section class="slide" data-title="Skills de historias de usuario" data-phase="discovery" data-min="11">
+    <div class="tag">4 · Historias de usuario</div>
+    <h2>Tres skills: de la HU a las <em>tareas</em></h2>
+    <div class="pipe">
+      <div class="pipe-step">
+        <div class="pipe-n">1</div>
+        <code class="pipe-cmd">/draft-user-stories</code>
+        <p>Genera las HU a partir del PRD</p>
+        <div class="io"><span>Entra</span>📄 PRD</div>
+        <div class="io"><span>Sale</span>📝 Un .md por HU</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-n">2</div>
+        <code class="pipe-cmd">/push-user-story-to-ado</code>
+        <p>Sube cada HU a Azure DevOps</p>
+        <div class="io"><span>Entra</span>📝 HU en archivo</div>
+        <div class="io"><span>Sale</span>🎫 User Story</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-n">3</div>
+        <code class="pipe-cmd">/generate-ado-tasks</code>
+        <p>Crea las tareas de la HU</p>
+        <div class="io"><span>Entra</span>🎫 ID de la HU</div>
+        <div class="io"><span>Sale</span>✅ 3 tareas</div>
+      </div>
+    </div>
+    <div class="callout">🧑‍💼 <span>Detrás de cada HU y cada tarea hay un <b>subagente Product Manager</b>.</span></div>
+  </section>
+
+  <!-- 10b estimación -->
+  <section class="slide" data-title="Estimación: puntos y horas" data-phase="discovery" data-min="13">
+    <div class="tag">4 · Historias de usuario</div>
+    <h2>Puntos de historia y <em>horas</em></h2>
+    <div class="phases est">
+      <div class="phase">
+        <div class="phase-h">📐 Puntos de historia <small>al crear la HU (draft-user-stories)</small></div>
+        <div class="viz" style="justify-content:flex-start">
+          <span class="chip">01</span><span class="chip">02</span><span class="chip">03</span><span class="chip">05</span><span class="chip">08</span><span class="chip">13</span><span class="chip">21</span>
+        </div>
+        <ul><li>Escala Fibonacci</li><li>Tamaño relativo entre HU</li><li><b>No son horas</b></li></ul>
+      </div>
+      <div class="phase">
+        <div class="phase-h">⏱️ Horas de las tareas <small>al crear las tareas (generate-ado-tasks)</small></div>
+        <div class="viz" style="justify-content:flex-start">
+          <span class="chip">🎨 Diseño 1h</span><span class="chip agent">💻 Implementación 1–4h</span><span class="chip">🧪 Tests 1h</span>
+        </div>
+        <ul>
+          <li>Patrón conocido: 1h</li><li>Lógica nueva: 2h</li><li>Esquema no verificado: 3h</li><li>Descubrimiento externo: 4h</li>
+        </ul>
+      </div>
+    </div>
+    <p class="lead">En un flujo con IA, el tiempo lo marca cuánto terreno desconocido hay que investigar, no el tamaño. Resultado: de 3h a 6h por HU, en horas enteras.</p>
+  </section>
+
+  <!-- 10c demo HU -->
+  <section class="slide title-slide demo-slide" data-title="Demo: historias de usuario" data-phase="discovery" data-min="14">
+    <div class="demo-banner">⌨️ Demo en vivo</div>
+    <h2>Generemos las <em>historias de usuario</em> y sus tareas en Azure DevOps</h2>
+    <div class="flow demo">
+      <div class="step"><span class="ico">📝</span>Generar HU<small><code>/draft-user-stories</code><br>Product Manager lee el PRD</small></div>
+      <div class="step"><span class="ico">📂</span>HU en archivos<small>docs/user-stories/HU-NNN.md</small></div>
+      <div class="step"><span class="ico">🎫</span>Subir a Azure DevOps<small><code>/push-user-story-to-ado</code><br>User Story bajo la Iniciativa</small></div>
+      <div class="step"><span class="ico">✅</span>Crear tareas<small><code>/generate-ado-tasks</code><br>Diseño · Implementación · Tests</small></div>
+    </div>
+    <p class="term-hint">&gt; Cambia a la terminal<span class="cursor">_</span></p>
   </section>
 
   <!-- 9 SDD -->
-  <section class="slide" data-title="SDD" data-min="21">
-    <div class="tag">4 · SDD</div>
+  <section class="slide" data-title="SDD" data-phase="delivery" data-min="16">
+    <div class="tag">5 · SDD · Delivery</div>
     <h2>Spec-Driven Development</h2>
+    <div class="viz" style="justify-content:flex-start">
+      <span class="chip">🔍 Discovery ✔</span>
+      <span class="chip">📄 PRD</span><span class="chip">🧩 Arquitectura</span><span class="chip">📝 HU</span>
+      <span class="arrow">→ insumos →</span>
+      <span class="chip agent">🚀 Estamos en Delivery</span>
+    </div>
     <ul>
-      <li class="reveal">Las SPECS son <b>archivos</b>, versionados y revisables</li>
-      <li class="reveal">Reducen alucinaciones: el agente trabaja contra un contrato</li>
-      <li class="reveal">Specs verificables: criterios de aceptación → pruebas</li>
+      <li>Las SPECS son <b>archivos</b>, versionados y revisables</li>
+      <li>Reducen alucinaciones: el agente trabaja contra un contrato</li>
+      <li>Specs verificables: criterios de aceptación → pruebas</li>
     </ul>
+    <div class="grid">
+      <div class="card card-demo"><span class="pat-badge">Lo usaremos en el demo</span><b>OpenSpec</b>🪶 Ligero. Propuestas de cambio sobre proyectos existentes.<br><small><code>/opsx:propose</code> → <code>/opsx:apply</code> → <code>/opsx:archive</code></small></div>
+      <div class="card"><b>Spec Kit</b>🧱 De GitHub. Flujo estructurado que parte de la constitución del proyecto.<br><small><code>/speckit.constitution</code> → <code>.specify</code> → <code>.plan</code> → <code>.tasks</code> → <code>.implement</code></small></div>
+      <div class="card"><b>BMAD</b>👥 Equipo ágil de agentes con roles. Cubre todo el ciclo; el más pesado.<br><small>analista · PM · arquitecto · dev · QA<br><code>/bmad:bmm:workflows:prd</code> · <code>…:dev-story</code></small></div>
+      <div class="card"><b>SDD propio</b>🏭 A la medida de la fábrica: skills y subagentes propios, integrados con Azure DevOps.<br><small><code>/specify</code> → <code>/plan</code> → <code>/tasks</code> → <code>/implement</code> → <code>/verify</code></small></div>
+    </div>
   </section>
 
   <!-- 10 flujo SDD -->
-  <section class="slide" data-title="Specify · Plan · Tasks · Implement" data-min="24">
-    <div class="tag">4 · SDD</div>
-    <h2>Specify → Plan → Tasks → Implement</h2>
-    <div class="flow" id="sdd">
-      <div class="step" data-d="Qué y por qué, sin cómo. Escenarios y criterios de aceptación. Aquí se gana el 70%.">Specify</div>
-      <div class="step" data-d="Cómo: stack, arquitectura, contratos, ADR aplicables.">Plan</div>
-      <div class="step" data-d="Plan dividido en tareas pequeñas, ordenadas y comprobables.">Tasks</div>
-      <div class="step" data-d="El agente implementa tarea a tarea y se verifica contra la spec.">Implement</div>
+  <section class="slide" data-title="Specify · Plan · Tasks · Implement" data-phase="delivery" data-min="18">
+    <div class="tag">5 · SDD</div>
+    <h2>Specify → Plan → Tasks → <em>Implement</em></h2>
+    <div class="pipe pipe4">
+      <div class="pipe-step">
+        <div class="pipe-n">1</div>
+        <code class="pipe-cmd">Specify</code>
+        <p>Qué y por qué, sin el cómo</p>
+        <div class="io"><span>Sale</span>📝 spec.md</div>
+        <small>Escenarios y criterios de aceptación</small>
+        <div class="io"><span>Cmd</span><code class="pipe-code">/opsx:propose</code></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-n">2</div>
+        <code class="pipe-cmd">Plan</code>
+        <p>Cómo se va a construir</p>
+        <div class="io"><span>Sale</span>🗂️ design.md</div>
+        <small>Stack, arquitectura, contratos y ADR</small>
+        <div class="io"><span>Cmd</span><code class="pipe-code">/opsx:propose</code></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-n">3</div>
+        <code class="pipe-cmd">Tasks</code>
+        <p>Trabajo en pasos pequeños</p>
+        <div class="io"><span>Sale</span>✅ tasks.md</div>
+        <small>Tareas ordenadas y comprobables</small>
+        <div class="io"><span>Cmd</span><code class="pipe-code">/opsx:propose</code></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="pipe-step pipe-impl">
+        <div class="pipe-n">4</div>
+        <code class="pipe-cmd">Implement</code>
+        <p>El agente codifica tarea a tarea</p>
+        <div class="io"><span>Sale</span>💻 Código y tests</div>
+        <small>Se verifica contra la spec</small>
+        <div class="io"><span>Cmd</span><code class="pipe-code">/opsx:apply</code></div>
+      </div>
     </div>
-    <div class="detail" id="sddDetail">Haz clic en una fase.</div>
-    <div class="bars" style="margin-top:1vh">
-      <div class="bar"><span>Specify</span><div class="track"><div class="fill" style="--w:70%"></div></div></div>
-      <div class="bar"><span>Resto</span><div class="track"><div class="fill" style="--w:30%"></div></div></div>
+    <div class="split">
+      <div class="seg" style="--w:70%">Specify · Plan · Tasks <b>70% del esfuerzo</b></div>
+      <div class="seg impl" style="--w:30%">Implement <b>30%</b></div>
     </div>
+    <p class="lead">En OpenSpec, <code>/opsx:propose</code> genera de una vez la spec, el diseño y las tareas.</p>
   </section>
 
-  <!-- 11 spec ejemplo -->
-  <section class="slide" data-title="Ejemplo de spec" data-min="27">
-    <div class="tag">4 · SDD</div>
-    <h2>Una spec es un archivo</h2>
-<pre><span class="c"># specs/001-login/spec.md</span>
-<span class="k">## HU-001</span> Como usuario quiero iniciar sesión con correo y clave
-
-<span class="k">### Criterios de aceptación</span>
-<span class="g">Dado</span> credenciales válidas
-<span class="g">Cuando</span> envío el formulario
-<span class="g">Entonces</span> recibo un token y soy redirigido al inicio
-
-<span class="g">Dado</span> credenciales inválidas
-<span class="g">Entonces</span> veo "Credenciales incorrectas" y no se crea sesión</pre>
-    <p class="lead">Cada criterio se convierte en una prueba: así la spec es verificable.</p>
-  </section>
-
-  <!-- 12 AGENTS.md -->
-  <section class="slide" data-title="AGENTS.md" data-min="28">
-    <div class="tag">5 · AGENTS.md</div>
-    <h2>AGENTS.md: el harness base</h2>
-    <ul>
-      <li>Instrucciones del sistema generales para todos los agentes</li>
-      <li>Mantenerlo <b>reducido</b>: lo específico va en las specs</li>
-    </ul>
-<pre><span class="c"># AGENTS.md</span>
-<span class="k">Stack:</span> FastAPI + React
-<span class="k">Arquitectura:</span> hexagonal (ver docs/adr/)
-<span class="k">Flujo:</span> specs en specs/ → implementar solo tareas aprobadas
-<span class="k">Verificar:</span> correr tests antes de dar algo por terminado</pre>
-  </section>
-
-  <!-- 13 cierre -->
-  <section class="slide" data-title="Cierre" data-min="30">
-    <div class="tag">6 · Cierre</div>
-    <h2>Harness + SDD = software <em>verificable</em></h2>
+  <!-- 11 estructura de estándares -->
+  <section class="slide" data-title="Estándares: docs/base-standards" data-phase="delivery" data-min="20">
+    <div class="tag">5 · SDD</div>
+    <h2>Estándares del proyecto: <em>base-standards</em></h2>
+    <p class="lead">Los agentes arrancan por CLAUDE.md (symlink a base-standards.md), que enlaza al resto de reglas, y las usan en cada fase del SDD:</p>
+    <div class="viz" style="justify-content:flex-start">
+      <span class="chip agent">📚 Estándares</span><span class="arrow">→</span>
+      <span class="chip">📝 Specify</span><span class="chip">🗂️ Plan</span><span class="chip">✅ Tasks</span><span class="chip">💻 Implement</span>
+    </div>
+<pre><span class="c"># raíz del proyecto</span>
+<span class="k">CLAUDE.md</span> <span class="c">⇢ symlink a docs/base-standards.md</span>
+<span class="k">docs/</span>
+├─ <span class="g">base-standards.md</span>         <span class="c">← entrada: principios, idioma, skills, modelo</span>
+├─ backend-standards.md      <span class="c">← FastAPI, DDD, SOLID, API, testing, seguridad</span>
+├─ frontend-standards.md     <span class="c">← React, microfrontends, UI/UX, testing</span>
+├─ documentation-standards.md <span class="c">← cómo documentar y mantener los AI specs</span>
+└─ openspec-tasks-mandatory-steps.md <span class="c">← checklist obligatorio de tasks.md</span>
+<span class="k">.claude/skills/</span>             <span class="c">← skills del proyecto (draft-prd, draft-architecture…)</span></pre>
     <div class="grid">
-      <div class="card"><b>Harness</b>Guía y controla al agente</div>
-      <div class="card"><b>Arquitectura</b>Límites claros para el código</div>
-      <div class="card"><b>SDD</b>Specs como contrato verificable</div>
+      <div class="card"><b>Principios</b>Pasos cortos, TDD, tipado, nombres claros</div>
+      <div class="card"><b>Idioma</b>Código en inglés; documentación de proceso en español</div>
+      <div class="card"><b>Por área</b>Backend y frontend con sus propios estándares</div>
     </div>
-    <p class="lead">¿Preguntas?</p>
+  </section>
+
+  <!-- 12b resumen de estándares derivados -->
+  <section class="slide" data-title="Estándares derivados" data-phase="delivery" data-min="22">
+    <div class="tag">5 · SDD</div>
+    <h2>¿Qué hace cada estándar derivado de <em>base-standards</em>?</h2>
+    <div class="grid std">
+      <div class="card"><b>⚙️ backend-standards</b><ul>
+        <li>FastAPI + DDD y SOLID</li><li>Diseño de API</li><li>Base de datos</li><li>Testing y seguridad</li></ul></div>
+      <div class="card"><b>🖥️ frontend-standards</b><ul>
+        <li>React y microfrontends</li><li>Estructura del proyecto</li><li>UI/UX</li><li>Testing</li></ul></div>
+      <div class="card"><b>📚 documentation-standards</b><ul>
+        <li>Documentación técnica</li><li>AI specs</li><li>Reglas de idioma</li></ul></div>
+      <div class="card"><b>✅ openspec-tasks-mandatory-steps</b><ul>
+        <li>Pasos obligatorios en tasks.md</li><li>Tests unitarios</li><li>Pruebas manuales ejecutadas por el agente</li></ul></div>
+    </div>
+    <p class="lead">base-standards fija los principios; cada estándar los baja a su área.</p>
+  </section>
+
+  <!-- 12 demo openspec -->
+  <section class="slide title-slide demo-slide" data-title="Demo: OpenSpec" data-phase="delivery" data-min="23">
+    <div class="demo-banner">⌨️ Demo en vivo</div>
+    <h2>Del requerimiento al código con <em>OpenSpec</em></h2>
+    <div class="flow demo">
+      <div class="step"><span class="ico">🔭</span>Explore<small><code>/opsx:explore</code><br>investigar y aclarar</small></div>
+      <div class="step"><span class="ico">📝</span>Propose<small><code>/opsx:propose</code><br>proposal · specs · tasks</small></div>
+      <div class="step"><span class="ico">💻</span>Apply<small><code>/opsx:apply</code><br>implementar tarea a tarea</small></div>
+    </div>
+    <p class="term-hint">&gt; Cambia a la terminal<span class="cursor">_</span></p>
+  </section>
+
+  <!-- 13b status report -->
+  <section class="slide" data-title="Skill: generate-status-report" data-min="25">
+    <div class="tag">6 · Seguimiento</div>
+    <h2>Informe de avance con <em>generate-status-report</em></h2>
+    <div class="viz" style="justify-content:flex-start">
+      <span class="chip">🎯 ID de la Iniciativa (Azure DevOps)</span><span class="arrow">→</span>
+      <span class="chip agent">⌨️ /generate-status-report</span><span class="arrow">→</span>
+      <span class="chip agent">🧑‍💼 Subagente Project Manager</span><span class="arrow">→</span>
+      <span class="chip">📄 reports/status/estado-proyecto.md</span>
+    </div>
+    <p class="lead">Lee HU, tareas y bugs de la Iniciativa y los convierte en un informe ejecutivo para stakeholders.</p>
+    <div class="grid">
+      <div class="card"><b>📊 Avance real</b>Ponderado por Story Points, no solo conteo de HU</div>
+      <div class="card"><b>🔮 Forecast de fecha</b>Velocidad histórica y 3 escenarios: optimista, probable, conservador</div>
+      <div class="card"><b>⚠️ Riesgos y bugs</b>Bloqueos, dependencias y tendencia de bugs</div>
+      <div class="card"><b>🖥️ Dashboard HTML</b>Vista visual lista para compartir</div>
+    </div>
+  </section>
+
+  <!-- cierre -->
+  <section class="slide" data-title="Evolución del harness" data-min="27">
+    <div class="tag">7 · Cierre</div>
+    <h2>Evolución del <em>harness</em></h2>
+    <div class="evo">
+      <div class="evo-step e1">
+        <div class="evo-h">🟢 Hoy<small>Agentes guiados</small></div>
+        <ul><li>Agentes con rol</li><li>Specs como contrato</li><li>Verificación: tests y estándares</li></ul>
+      </div>
+      <div class="evo-step e2">
+        <div class="evo-h">🚀 Evolución<small>Más escala, más producto, retroalimentación</small></div>
+        <div class="evo-cols">
+          <div><b>Escala y control</b><ul><li>Agentes en paralelo</li><li>Revisor independiente</li><li>Memoria compartida entre proyectos</li><li>Harness común para toda la fábrica de software</li></ul></div>
+          <div><b>Discovery de producto</b><ul><li>Entrevistas con usuarios</li><li>Formular y validar hipótesis de producto</li><li>Priorización de oportunidades</li><li>Mapas de journey</li><li>Pruebas de concepto</li></ul></div>
+          <div><b>Retroalimentación continua</b><ul><li>Producción alimenta el Discovery</li><li>Auto-reparación de errores</li></ul></div>
+        </div>
+      </div>
+    </div>
+    <p class="ask">¿Preguntas?</p>
   </section>
 
 </main>
@@ -318,6 +639,7 @@
   var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
   var cur = 0, shown = [];
   var progress = document.getElementById('progress');
+  var badge = document.getElementById('phaseBadge');
   var count = document.getElementById('count');
   var overview = document.getElementById('overview');
   var ovGrid = document.getElementById('ovGrid');
@@ -334,6 +656,10 @@
     progress.style.width = ((n + 1) / slides.length * 100) + '%';
     count.textContent = (n + 1) + ' / ' + slides.length;
     if (!silent) { try { history.replaceState(null, '', '#' + (n + 1)); } catch (e) {} }
+    document.body.classList.toggle('demo', slides[n].classList.contains('demo-slide'));
+    var ph = slides[n].getAttribute('data-phase');
+    badge.className = 'phase-badge' + (ph ? ' ' + ph : '');
+    badge.innerHTML = chipHtml(ph === 'discovery' ? '🔍 Estamos en Discovery' : ph === 'delivery' ? '🚀 Estamos en Delivery' : '');
     shown[n] = shown[n] || 0;
   }
 
@@ -364,6 +690,123 @@
     }
   });
 
+  // monochrome SVG icons: every emoji in the deck is swapped for a single-colour icon
+  var ICON_PATHS = {
+    search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+    rocket: '<path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="m12 15-3-3a22 22 0 0 1 2-4 12 12 0 0 1 11-6c0 3-1 8-6 11a22 22 0 0 1-4 2z"/><path d="M9 12H4s.5-3 2-4c1.5-1 5 0 5 0"/><path d="M12 15v5s3-.5 4-2c1-1.5 0-5 0-5"/>',
+    arch: '<rect x="8.5" y="2" width="7" height="5" rx="1"/><rect x="2" y="17" width="7" height="5" rx="1"/><rect x="15" y="17" width="7" height="5" rx="1"/><path d="M12 7v5M5.5 17v-5h13v5"/>',
+    file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/>',
+    code: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+    check: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    bulb: '<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.3h6c0-1.1.4-1.8 1-2.3A7 7 0 0 0 12 2z"/>',
+    user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    map: '<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>',
+    layers: '<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/>',
+    clip: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+    book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+    flask: '<path d="M9 2h6M10 2v6L4 20a1 1 0 0 0 .9 1.5h14.2A1 1 0 0 0 20 20L14 8V2"/>',
+    box: '<path d="m21 8-9-5-9 5v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+    terminal: '<path d="m4 17 6-6-6-6M12 19h8"/>',
+    ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v2M13 17v2M13 11v2"/>',
+    target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+    compass: '<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',
+    star: '<path d="m12 2 3.1 6.3 6.9 1-5 4.8 1.2 6.9-6.2-3.2-6.2 3.2L7 14.1 2 9.3l6.9-1z"/>',
+    message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    ruler: '<path d="M21.3 15.3a1 1 0 0 1 0 1.4l-4.6 4.6a1 1 0 0 1-1.4 0L2.7 8.7a1 1 0 0 1 0-1.4l4.6-4.6a1 1 0 0 1 1.4 0z"/><path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2M4.5 13.5l2 2"/>',
+    pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+    folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/>',
+    eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+    feather: '<path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8 2 22M17.5 15H9"/>',
+    brick: '<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9.3h18M3 14.7h18M9 4v5.3M15 9.3v5.4M9 14.7V20"/>',
+    factory: '<path d="M2 20V8l6 4V8l6 4V4h4v16z"/><path d="M2 20h20"/>',
+    chart: '<path d="M3 3v18h18"/><path d="M7 16v-5M12 16V7M17 16v-8"/>',
+    sparkle: '<path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/>',
+    alert: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+    dot: '<circle cx="12" cy="12" r="6" fill="currentColor"/>',
+    monitor: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+    clock: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>'
+  };
+  var EMOJI_ICON = {
+    '💡': 'bulb',
+    '📄': 'file',
+    '📝': 'file',
+    '📑': 'file',
+    '🧑‍💼': 'user',
+    '🗺️': 'map',
+    '🧩': 'layers',
+    '📋': 'clip',
+    '📏': 'book',
+    '💻': 'code',
+    '⚙️': 'gear',
+    '✅': 'check',
+    '✔': 'check',
+    '🧪': 'flask',
+    '📦': 'box',
+    '⌨️': 'terminal',
+    '🎫': 'ticket',
+    '🎯': 'target',
+    '👥': 'users',
+    '🧭': 'compass',
+    '⭐': 'star',
+    '💬': 'message',
+    '📐': 'ruler',
+    '🎨': 'pen',
+    '📂': 'folder',
+    '🗂️': 'folder',
+    '🔭': 'eye',
+    '🪶': 'feather',
+    '🧱': 'brick',
+    '🏭': 'factory',
+    '📊': 'chart',
+    '🔮': 'sparkle',
+    '⚠️': 'alert',
+    '🟢': 'dot',
+    '🖥️': 'monitor',
+    '📚': 'book',
+    '🚀': 'rocket',
+    '🔍': 'search',
+    '🔎': 'search',
+    '🏗️': 'arch',
+    '⏱️': 'clock'
+  };
+  var FE0F = /\uFE0F/g;
+  var EMOJI_KEYS = Object.keys(EMOJI_ICON).map(function (k) { return k.replace(FE0F, ''); }).sort(function (a, b) { return b.length - a.length; });
+  var EMOJI_BY_KEY = {};
+  Object.keys(EMOJI_ICON).forEach(function (k) { EMOJI_BY_KEY[k.replace(FE0F, '')] = EMOJI_ICON[k]; });
+  function iconSvg(name) {
+    return '<svg class="ico-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON_PATHS[name] + '</svg>';
+  }
+  function chipHtml(text) {
+    var out = '', clean = text.replace(FE0F, ''), i = 0;
+    while (i < clean.length) {
+      var hit = null;
+      for (var k = 0; k < EMOJI_KEYS.length; k++) { if (clean.indexOf(EMOJI_KEYS[k], i) === i) { hit = EMOJI_KEYS[k]; break; } }
+      if (hit) { out += iconSvg(EMOJI_BY_KEY[hit]); i += hit.length; }
+      else { out += clean[i].replace(/&/g, '&amp;').replace(/</g, '&lt;'); i++; }
+    }
+    return out;
+  }
+  function monoize(root) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), nodes = [], n;
+    while ((n = walker.nextNode())) {
+      var tag = n.parentNode && n.parentNode.nodeName.toLowerCase();
+      if (tag === 'script' || tag === 'style') continue;
+      var t = n.nodeValue.replace(FE0F, '');
+      if (EMOJI_KEYS.some(function (k) { return t.indexOf(k) !== -1; })) nodes.push(n);
+    }
+    nodes.forEach(function (node) {
+      var tmp = document.createElement('span');
+      tmp.innerHTML = chipHtml(node.nodeValue);
+      var frag = document.createDocumentFragment();
+      while (tmp.firstChild) frag.appendChild(tmp.firstChild);
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+  monoize(document.getElementById('deck'));
+  monoize(document.querySelector('.hud'));
+
   // interactive step groups
   function wire(containerId, detailId, empty) {
     var box = document.getElementById(containerId), det = document.getElementById(detailId);
@@ -371,13 +814,19 @@
       var st = e.target.closest('.step'); if (!st) return;
       var on = st.classList.contains('on');
       box.querySelectorAll('.step').forEach(function (s) { s.classList.remove('on'); });
-      if (on) { det.textContent = empty; return; }
-      st.classList.add('on'); det.textContent = st.getAttribute('data-d');
+      if (on) { det.classList.remove('viz'); det.textContent = empty; return; }
+      st.classList.add('on');
+      if (st.hasAttribute('data-agent')) {
+        det.innerHTML = '';
+        [['in', 'chip'], ['agent', 'chip agent'], ['out', 'chip']].forEach(function (p, i) {
+          if (i) { var a = document.createElement('span'); a.className = 'arrow'; a.textContent = '→'; det.appendChild(a); }
+          var c = document.createElement('span'); c.className = p[1]; c.innerHTML = chipHtml(st.getAttribute('data-' + p[0])); det.appendChild(c);
+        });
+        det.classList.add('viz');
+      } else { det.classList.remove('viz'); det.textContent = st.getAttribute('data-d'); }
     });
   }
-  wire('flow', 'flowDetail', 'Haz clic en una etapa para ver qué agente trabaja y qué entrega.');
-  wire('patterns', 'patDetail', 'Selecciona un patrón.');
-  wire('sdd', 'sddDetail', 'Haz clic en una fase.');
+  wire('flow', 'flowDetail', 'Haz clic en una etapa para ver qué entra, quién trabaja y qué sale.');
 
   // overview
   slides.forEach(function (s, i) {
