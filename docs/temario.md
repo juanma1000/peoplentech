@@ -158,12 +158,17 @@ Dos peldaños:
   - Agentes con rol
   - Specs como contrato
   - Verificación: tests y estándares
-- **Evolución: más escala, más producto, retroalimentación**
+- **Evolución: más escala, más pruebas, más producto, retroalimentación**
   - Escala y control
     - Agentes en paralelo
     - Revisor independiente
     - Memoria compartida entre proyectos
     - Harness común para toda la fábrica de software
+  - Pruebas automatizadas
+    - Test E2E por cada HU
+    - Pruebas de regresión
+    - Pruebas de integración
+    - Otras según el caso: rendimiento, seguridad, accesibilidad
   - Discovery de producto
     - Entrevistas con usuarios
     - Formular y validar hipótesis de producto

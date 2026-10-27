@@ -109,11 +109,11 @@
   .card ul { font-size: .95em; gap: .5vh; margin-top: .8vh; }
   .card ul li { padding-left: 1.1em; }
   .ask { font-size: clamp(2.4rem, 6vw, 5rem); font-weight: 700; color: var(--accent); text-align: center; line-height: 1; }
-  .evo { display: grid; grid-template-columns: 1fr 3fr; gap: 1.6vw; align-items: end; }
+  .evo { display: grid; grid-template-columns: 1fr 4fr; gap: 1.6vw; align-items: end; }
   .evo-step { background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 1.6vh 1.4vw; }
   .evo-step.e1 { margin-top: 8vh; }
   .evo-step.e2 { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
-  .evo-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4vw; margin-top: 1vh; font-size: clamp(.9rem, 1.4vw, 1.15rem); }
+  .evo-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4vw; margin-top: 1vh; font-size: clamp(.9rem, 1.4vw, 1.15rem); }
   .evo-cols b { color: var(--accent2); display: block; }
   .evo-cols ul { font-size: 1em; margin-top: .6vh; gap: .6vh; }
   .evo-h { font-weight: 700; font-size: clamp(1.1rem, 2vw, 1.6rem); }
@@ -613,9 +613,10 @@
         <ul><li>Agentes con rol</li><li>Specs como contrato</li><li>Verificación: tests y estándares</li></ul>
       </div>
       <div class="evo-step e2">
-        <div class="evo-h">🚀 Evolución<small>Más escala, más producto, retroalimentación</small></div>
+        <div class="evo-h">🚀 Evolución<small>Más escala, más pruebas, más producto, retroalimentación</small></div>
         <div class="evo-cols">
           <div><b>Escala y control</b><ul><li>Agentes en paralelo</li><li>Revisor independiente</li><li>Memoria compartida entre proyectos</li><li>Harness común para toda la fábrica de software</li></ul></div>
+          <div><b>Pruebas automatizadas</b><ul><li>Test E2E por cada HU</li><li>Pruebas de regresión</li><li>Pruebas de integración</li><li>Otras según el caso: rendimiento, seguridad, accesibilidad</li></ul></div>
           <div><b>Discovery de producto</b><ul><li>Entrevistas con usuarios</li><li>Formular y validar hipótesis de producto</li><li>Priorización de oportunidades</li><li>Mapas de journey</li><li>Pruebas de concepto</li></ul></div>
           <div><b>Retroalimentación continua</b><ul><li>Producción alimenta el Discovery</li><li>Auto-reparación de errores</li></ul></div>
         </div>
