@@ -174,12 +174,7 @@ Dos peldaños:
     - Memoria compartida entre proyectos
     - Harness común para toda la fábrica de software
   - Pruebas automatizadas
-    - Test E2E por cada HU
-    - Pruebas de regresión
-    - Pruebas de integración
-    - Mutation testing
-    - Pruebas de estrés
-    - Otras según el caso: rendimiento, seguridad, accesibilidad
+    - E2E por cada HU, regresión, integración, caracterización, mutation testing, estrés, rendimiento, seguridad, accesibilidad
   - Discovery de producto
     - Entrevistas con usuarios
     - Formular y validar hipótesis de producto
