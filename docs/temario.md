@@ -9,13 +9,15 @@
 | # | Bloque | Tiempo |
 |---|--------|--------|
 | 1 | Introducción: agentes y harness | 3 min |
-| 2 | Discovery: benchmarking y PRD | 4 min |
+| 2 | Benchmarking y PRD | 4 min |
 | 3 | Arquitectura | 4 min |
 | 4 | Historias de usuario y estimación | 5 min |
 | 5 | SDD y estándares: de la especificación al código | 9 min |
 | 6 | Seguimiento: informe de avance | 2 min |
 | 7 | Cierre: evolución del harness y preguntas | 3 min |
 
+> Agrupación en la agenda: **Discovery** (qué construir) = bloques 2, 3 y 4; **Delivery** (cómo construirlo) = bloque 5; Seguimiento y Cierre aparte. Coincide con el distintivo de fase de cada diapositiva.
+>
 > Los tiempos por bloque son tentativos (suman 30 min); incluyen las demos en vivo.
 >
 > Las cuatro demos en vivo (PRD, arquitectura, historias de usuario y OpenSpec) tienen un estilo propio en la presentación: fondo oscuro, banner "Demo en vivo" y el aviso "Cambia a la terminal".
@@ -25,7 +27,9 @@
 ## 1. Introducción: agentes y harness (3 min)
 
 ### 1.1 Agente + harness
-El modelo es el motor; el harness es todo lo que lo rodea, lo guía y lo controla:
+**Agente**: un modelo de IA que razona, usa herramientas (leer y editar archivos, ejecutar comandos) y repite hasta cumplir el objetivo.
+
+**Harness**: todo lo que rodea, guía y controla al agente:
 - **Skills**: capacidades empaquetadas que el agente carga cuando la tarea las necesita
 - **Reglas**: normas y convenciones del proyecto
 - **Memoria**: contexto persistente entre sesiones
@@ -46,7 +50,7 @@ Dos grandes bloques. Cada etapa tiene una entrada, un agente y una salida.
 - Implementación: Subagentes Backend Expert, Frontend Expert y QA Expert → código tarea a tarea
 - Entrega: tests, CI y review → entrega verificada
 
-## 2. Discovery (4 min)
+## 2. Benchmarking y PRD (4 min)
 
 ### 2.1 Benchmarking con IA de investigación
 Herramientas: Perplexity, NotebookLM u otras. Búsqueda en la web para obtener:
@@ -55,12 +59,16 @@ Herramientas: Perplexity, NotebookLM u otras. Búsqueda en la web para obtener:
 - Funciones principales
 - Resultado: documento de benchmark, insumo del PRD
 
-### 2.2 Generación del PRD
+### 2.2 Nuestro harness: subagentes y skills
+- **Subagentes**: Product Manager (PRD, HU y tareas), Software Architect (arquitectura hexagonal y ADR), Backend Expert (FastAPI), Frontend Expert (React), QA Expert (pruebas), Project Manager (informe de avance)
+- **Skills personalizadas**: `/draft-prd`, `/draft-architecture`, `/draft-user-stories`, `/push-user-story-to-ado`, `/generate-ado-tasks`, `/generate-status-report`
+
+### 2.3 Generación del PRD
 - Qué es un PRD (Product Requirements Document): define qué se construye y por qué, antes del cómo
 - Entradas: documento de benchmark (generado en el paso anterior) e idea de producto
 - Secciones: objetivo, usuarios, alcance, funciones clave y criterios de éxito
 
-### 2.3 Demo en vivo: PRD con una skill
+### 2.4 Demo en vivo: PRD con una skill
 - `/draft-prd` → responder preguntas (idea, usuarios, alcance) → PRD generado
 
 ## 3. Arquitectura (4 min)
@@ -93,7 +101,8 @@ Tres skills encadenadas (entra → sale):
 Detrás de cada HU y cada tarea hay un subagente Product Manager.
 
 ### 4.2 Estimación: puntos de historia y horas
-- **Puntos de historia** (al crear la HU): escala Fibonacci (01, 02, 03, 05, 08, 13, 21); tamaño relativo entre HU, no son horas
+- **Puntos de historia** (al crear la HU): escala Fibonacci (01 Muy pequeño a 21 Extraordinario); el Product Manager compara cada HU con el resto del backlog; no son horas
+  - Se parte una HU por cada sistema externo (BD con esquema no verificado, API de terceros), no por su tamaño
 - **Horas de las tareas** (al crear las tareas): Diseño 1h y Tests 1h fijos; Implementación de 1h a 4h según el eje de investigación
   - Patrón conocido: 1h
   - Lógica nueva: 2h
@@ -120,7 +129,7 @@ Comparación de enfoques (OpenSpec es el que se usa en el demo):
 - **SDD propio**: a la medida de la fábrica, con skills y subagentes propios integrados con Azure DevOps (`/specify` → `/plan` → `/tasks` → `/implement` → `/verify`)
 
 ### 5.2 Flujo: Specify → Plan → Tasks → Implement
-Cuatro fases visibles a la vez, con su salida y su comando de OpenSpec:
+Antes de las cuatro fases: `/opsx:explore` (investigar y aclarar la idea, sin generar archivos). Luego, cuatro fases visibles a la vez, con su salida y su comando de OpenSpec:
 - Specify: qué y por qué, sin cómo; escenarios y criterios de aceptación. Sale `spec.md`. Comando: `/opsx:propose`
 - Plan: cómo (stack, arquitectura, contratos, ADR aplicables). Sale `design.md`. Comando: `/opsx:propose`
 - Tasks: tareas pequeñas, ordenadas y comprobables. Sale `tasks.md`. Comando: `/opsx:propose`
@@ -168,6 +177,8 @@ Dos peldaños:
     - Test E2E por cada HU
     - Pruebas de regresión
     - Pruebas de integración
+    - Mutation testing
+    - Pruebas de estrés
     - Otras según el caso: rendimiento, seguridad, accesibilidad
   - Discovery de producto
     - Entrevistas con usuarios
